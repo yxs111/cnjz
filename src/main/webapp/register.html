@@ -15,6 +15,216 @@
 <script type="text/javascript">
    var navID = "0";
 </script>
+    <script>
+        // $(function () {
+        //     $("#account").blur(function () {
+        //         alert("账号输入框失去光标了");
+        //         var email = $("#account").val();
+        //         alert(email);
+        //         // var zhengze1 = "^[a-z0-9A-Z]+[- | a-z0-9A-Z . _]+@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-z]{2,}$";
+        //         if (email.match("^[a-z0-9A-Z]+[- | a-z0-9A-Z . _]+@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-z]{2,}$")) {
+        //             // alert("邮箱正确！！！")
+        //
+        //         } else {
+        //             // alert("邮箱不合法")
+        //         }
+        //     });
+        // });
+        //
+        // //确认密码判断
+        // $(function () {
+        //     $("#password_validate").blur(function () {
+        //         var password = $("#password").val();
+        //         var password_validate = $("#password_validate").val();
+        //         if (password == password_validate) {
+        //             alert("密码校验成功！！！");
+        //         } else {
+        //             alert("密码不相等，重新输入")
+        //         }
+        //     })
+        // })
+
+        //注册
+        var flag1=true;
+        function yzusername() {
+
+            $.ajax({
+                type:"post",
+                data:{account:$("#account").val()},
+                url:"account",
+                dataType:"json",
+                success:function (data) {
+                    if(data>0){
+                        flag1=false;
+                        $.pt({
+                            target: $("#account"),
+                            position: 'r',
+                            align: 't',
+                            width: 'auto',
+                            height: 'auto',
+                            content:"账户已存在！"
+                        });
+                    }
+                }
+
+            })
+            return flag1;
+        }
+        function register(){
+            var account = $("#account").val(),
+                password = $("#register-password").val(),
+                repassword = $("#register-repassword").val(),
+                // code = $("#register-code").val(),
+                username = $("#usesrname").val(),
+                userphone = $("#userphone").val(),
+                address = $("#address").val(),
+
+                flag = false,
+                validatecode = null;
+            //判断账户是否为空
+            if(account == ""){
+                $.pt({
+                    target: $("#account"),
+                    position: 'r',
+                    align: 't',
+                    width: 'auto',
+                    height: 'auto',
+                    content:"账户不能为空"
+                });
+                flag = true;
+            }
+            //判断手机号是否为空
+            if(userphone == ""){
+                $.pt({
+                    target: $("#userphone"),
+                    position: 'r',
+                    align: 't',
+                    width: 'auto',
+                    height: 'auto',
+                    content:"手机号不能为空"
+                });
+                flag = true;
+            }
+            //判断地址是否为空
+            if(address == ""){
+                $.pt({
+                    target: $("#address"),
+                    position: 'r',
+                    align: 't',
+                    width: 'auto',
+                    height: 'auto',
+                    content:"地址不能为空"
+                });
+                flag = true;
+            }
+
+
+            //判断用户名密码是否为空
+            if(username == ""){
+                $.pt({
+                    target: $("#username"),
+                    position: 'r',
+                    align: 't',
+                    width: 'auto',
+                    height: 'auto',
+                    content:"用户名不能为空"
+                });
+                flag = true;
+            }
+
+            if(password == ""){
+                $.pt({
+                    target: $("#register-password"),
+                    position: 'r',
+                    align: 't',
+                    width: 'auto',
+                    height: 'auto',
+                    content:"密码不能为空"
+                });
+                flag = true;
+            }else{
+                if(password != repassword){
+                    $.pt({
+                        target: $("#register-repassword"),
+                        position: 'r',
+                        align: 't',
+                        width: 'auto',
+                        height: 'auto',
+                        content:"两次输入的密码不一致"
+                    });
+                    flag = true;
+                }
+            }
+            //用户名只能是15位以下的字母或数字
+            var regExp = new RegExp("^[a-zA-Z0-9_]{1,15}$");
+            if(!regExp.test(username)){
+                $.pt({
+                    target: $("#username"),
+                    position: 'r',
+                    align: 't',
+                    width: 'auto',
+                    height: 'auto',
+                    content:"用户名必须为15位以下的字母或数字"
+                });
+                flag = true;
+            }
+            //检查用户名是否已经存在
+            //调后台代码检查用户名是否已经被注册
+
+            //检查注册码是否正确
+            //调后台方法检查注册码，这里写死为11111111
+            // if(code != '123'){
+            //     $.pt({
+            //         target: $("#register-code"),
+            //         position: 'r',
+            //         align: 't',
+            //         width: 'auto',
+            //         height: 'auto',
+            //         content:"注册码不正确"
+            //     });
+            //     flag = true;
+            // }
+
+
+            if(flag){
+                return false;
+            }else{//注册
+                if(flag1==true){
+                    $.ajax({
+                        type: "post",
+                        url: "register",
+                        data: $("#registerForm").serialize(),
+
+                        dataType: "json",
+                        success: function () {
+                            spop({
+                                template: '<h4 class="spop-title">注册成功</h4>即将于3秒后返回登录',
+                                position: 'top-center',
+                                style: 'success',
+                                autoclose: 3000,
+                                onOpen: function () {
+                                    var second = 2;
+                                    var showPop = setInterval(function () {
+                                        if (second == 0) {
+                                            clearInterval(showPop);
+                                        }
+                                        $('.spop-body').html('<h4 class="spop-title">注册成功</h4>即将于' + second + '秒后返回登录');
+                                        second--;
+                                    }, 1000);
+                                },
+                                onClose: function () {
+                                    login();
+                                }
+                            });
+                        }
+                    })
+                }
+
+
+                return false;
+            }
+        }
+    </script>
 </head>
 
 <body>
@@ -44,27 +254,29 @@
 </script><!--top End-->
 
 <aside class="register_ban"></aside>
-<section class="contain register">
+
+
 	<div class="register_t"><span class="span"><a href="register.html" class="a1">个人账户</a></span><span><a href="register_2.html" class="a2">企业账户</a></span></div>
     <div class="c">
     <div class="title">会员注册<span>Member Registration</span></div>
+        <form action="#" id="registerForm" onsubmit="return false" method="post" class="container offset1 loginform">
         <div class="l">
             <table class="table" cellpadding="0" cellspacing="0">
                 <tr>
                     <td class="td1">帐号：</td>
-                    <td class="td2"><input type="text" class="text"><em class="red">*</em>请填写有效的邮箱地址并转向验证</td>
+                    <td class="td2"><input id="account" type="text" class="text"><em class="red" onblur="yzusername()">*</em>请填写有效的邮箱地址并转向验证</td>
                 </tr>
                 <tr>
                     <td class="td1">密码：</td>
-                    <td class="td2"><input type="text" class="text"><div class="jp"></div><em class="red">*</em>由6-12位数字加字母组成</td>
+                    <td class="td2"><input id="register-password" type="password" class="text"><div class="jp"></div><em class="red">*</em>由6-12位数字加字母组成</td>
                 </tr>
                 <tr>
                     <td class="td1">确认密码：</td>
-                    <td class="td2"><input type="text" class="text"><div class="jp"></div><em class="red">*</em>由6-12位数字加字母组成</td>
+                    <td class="td2"><input id="register-repassword" type="password" class="text"><div class="jp"></div><em class="red">*</em>由6-12位数字加字母组成</td>
                 </tr>
                 <tr>
                     <td class="td1">姓名：</td>
-                    <td class="td2"><input type="text" class="text"></td>
+                    <td class="td2"><input id = "username" type="text" class="text"></td>
                 </tr>
                 <tr>
                     <td class="td1">地区：</td>
@@ -87,26 +299,31 @@
                 </tr>
                 <tr>
                     <td class="td1">手机号码：</td>
-                  <td class="td2"><input type="text" class="text"></td>
+                  <td class="td2"><input id="userphone" type="text" class="text"></td>
                 </tr>
                 <tr>
                     <td class="td1">通讯地址：</td>
-                  <td class="td2"><input type="text" class="text"></td>
+                  <td class="td2"><input id="address" type="text" class="text"></td>
                 </tr>
+
+
                 <tr>
                     <td class="td1"></td>
                   <td class="td2"><label><input type="checkbox"> 我已阅读并同意</label><a href="#" class="hyxy">《会员协议》</a></td>
                 </tr>
                 <tr>
                     <td class="td1"></td>
-                    <td class="td2"><input type="button" value="同意协议并注册" class="tyxy"></td>
+                    <td class="td2"><input onClick="register()" type="button" value="同意协议并注册" class="tyxy"></td>
                 </tr>
             </table>
+
         </div>
         <div class="r">
-        	<img src="images/yyzh_03.jpg" width="146" height="147"><br>已有帐号？立即<a href="#">登录</a>
+        	<img src="images/yyzh_03.jpg" width="146" height="147"><br>已有帐号？立即<a href="login.html">登录</a>
         </div>
+        </form>
   </div>
+
 </section>
 <section class="zccg">
 	<div class="c">

@@ -14,6 +14,6 @@ public class LoginServiceImpl  implements LoginService {
     @Override
     public boolean login(User user) {
         int result = loginMapper.login(user);
-           return result>0? true:false;
+           return result > 0 ? true : false;
     }
 }

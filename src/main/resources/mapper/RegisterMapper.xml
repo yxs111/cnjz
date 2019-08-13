@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xcy.cnjz.mapper.RegisterMapper" >
+
+    <select id="registerUser" parameterType="com.xcy.cnjz.pojo.User" >
+ insert into user (id,account,password,userphone,address,username) values (null,#{account},#{password},#{userphone}
+ ,#{address},#{username})
+</select>
+
+
+</mapper>

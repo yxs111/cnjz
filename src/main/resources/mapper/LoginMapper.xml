@@ -3,7 +3,7 @@
 <mapper namespace="com.xcy.cnjz.mapper.LoginMapper" >
 
 <select id="login" parameterType="com.xcy.cnjz.pojo.User" resultType="int">
-select count(1)  from admin where account = #{account}
+select count(1)  from user where account = #{account}
         and password = #{password}
 </select>
 

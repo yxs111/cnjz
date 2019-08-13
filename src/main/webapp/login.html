@@ -43,6 +43,100 @@
     $("#nav" + navID).addClass("onnav");
 </script><!--top End-->
 
+<script>
+    // $(function () {
+    //     $("#login-account").blur(function () {
+    //         alert("账号输入框失去光标了");
+    //         var account = $("#login-account").val();
+    //         alert(account);
+    //
+    //         if (account.match("^[a-z0-9A-Z]+[- | a-z0-9A-Z . _]+@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-z]{2,}$")) {
+    //              alert("邮箱正确！！！")
+    //
+    //         } else {
+    //              alert("邮箱不合法")
+    //         }
+    //     });
+    // });
+
+    var flag3=true;
+    function login(){//登录
+
+        var account = $("#login-account").val(),
+            password = $("#login-password").val(),
+            validatecode = null,
+            flag = false;
+        //判断用户名密码是否为空
+        if(account == ""){
+            $.pt({
+                target: $("#login-account"),
+                position: 'r',
+                align: 't',
+                width: 'auto',
+                height: 'auto',
+                content:"账号不能为空"
+            });
+            flag = true;
+        }
+        if(password == ""){
+            $.pt({
+                target: $("#login-password"),
+                position: 'r',
+                align: 't',
+                width: 'auto',
+                height: 'auto',
+                content:"密码不能为空"
+            });
+            flag = true;
+        }
+        //用户名只能是15位以下的字母或数字
+        var regExp = new RegExp("^[a-zA-Z0-9_]{1,15}$");
+        if(!regExp.test(account)){
+            $.pt({
+
+                target: $("#login-account"),
+                position: 'r',
+                align: 't',
+                width: 'auto',
+                height: 'auto',
+                content:"账号必须为15位以下的字母或数字"
+            });
+            flag = true;
+        }
+
+        if(flag){
+            alert("flag==true");
+            return false;
+        }else{//登录
+            //调用后台登录验证的方法
+            alert("flag==false");
+            if (flag3){
+                $.ajax({
+                    type:"post",
+                    url:"login",
+                    data:{account:account,password:password},
+                    dataType:"json",
+                    success:function (data) {
+
+                        if (data){
+                            // $.cookie('userPhone', username, {expires: 7, path: '/'});
+                            window.location.reload();
+                            location.href="index.html";
+//								location.href= "shopList.html"
+                        }else {
+                            alert("密码错误！")
+                        }
+                    }
+                })
+            }
+
+            // return false;
+        }
+    }
+
+
+
+</script>
 <aside class="register_ban"></aside>
 <section class="contain login">
     <div class="c">
@@ -51,11 +145,11 @@
             <table class="table" cellpadding="0" cellspacing="0">
                 <tr>
                     <td class="td1">帐号：</td>
-                    <td class="td2"><input type="text" class="text"><em class="red">*</em>请填写有效的地址</td>
+                    <td class="td2"><input type="text" id = "login-account" class="text"><em class="red">*</em>请填写有效的地址</td>
                 </tr>
                 <tr>
                     <td class="td1">密码：</td>
-                    <td class="td2"><input type="text" class="text"><div class="jp"></div><em class="red">*</em>由6-12位数字加字母组成</td>
+                    <td class="td2"><input type="password" id = "login-password" class="text"><div class="jp"></div><em class="red">*</em>由6-12位数字加字母组成</td>
                 </tr>
                 <tr>
                     <td class="td1">验证码：</td>
@@ -71,7 +165,7 @@
                 </tr>
                 <tr>
                     <td class="td1"></td>
-                    <td class="td2"><input type="button" value="同意协议并登录" class="tyxy"> &nbsp;&nbsp;<a href="#" class="hyxy">找回密码？</a></td>
+                    <td class="td2"><input type="button" onClick="login() " value="同意协议并登录" class="tyxy"> &nbsp;&nbsp;<a href="#" class="hyxy">找回密码？</a></td>
                 </tr>
             </table>
             <div class="hzwz">
@@ -84,7 +178,7 @@
 				在线管理您的网站
 				支持在线支付-网银、支付宝、快钱
             </p>
-            <a href="#">马上注册</a>
+            <a href="register.html">马上注册</a>
         </div>
   </div>
 </section>
